@@ -11,7 +11,9 @@ az aks get-credentials --resource-group $RG --name $AKS
 
 kubectl get pods --all-namespaces
 
-kubectl apply -f hello-world-enclave.yaml
+kubectl apply -f samples/hello/hello-world-enclave.yaml
+kubectl get jobs -l app=sgx-test
+
 # Hello World: https://learn.microsoft.com/en-us/azure/confidential-computing/confidential-enclave-nodes-aks-get-started#deploy-hello-world-from-an-isolated-enclave-application-
 # Advanced: https://github.com/Azure-Samples/confidential-container-samples
 # Simple: https://github.com/Azure-Samples/confidential-computing/tree/main/containersamples
