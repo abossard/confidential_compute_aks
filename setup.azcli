@@ -1,0 +1,11 @@
+RG=confcom_aks
+L=westeurope
+AKS=aksconfcom
+
+az group create --name $RG --location $L
+az aks create --resource-group $RG --name $AKS --node-count 1  --enable-addons confcom
+az aks nodepool add --cluster-name $AKS --name confcompool1 --resource-group $RG --node-vm-size Standard_DC4s_v3 --node-count 2
+
+az aks get-credentials --resource-group $RG --name $AKS
+
+kubectl get pods --all-namespaces
