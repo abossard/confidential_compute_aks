@@ -1,11 +1,17 @@
 RG=confcom_aks
 L=westeurope
 AKS=aksconfcom
+CCPOOL=confcompool1
 
 az group create --name $RG --location $L
 az aks create --resource-group $RG --name $AKS --node-count 1  --enable-addons confcom
-az aks nodepool add --cluster-name $AKS --name confcompool1 --resource-group $RG --node-vm-size Standard_DC4s_v3 --node-count 2
-
+az aks nodepool add --cluster-name $AKS --name $CCPOOL --resource-group $RG --node-vm-size Standard_DC4s_v3 --node-count 2
+az aks nodepool update --cluster-name $AKS --name $CCPOOL --resource-group $RG --enable-cluster-autoscaler --min-count 1 --max-count 2 --labels confcom=enabled
 az aks get-credentials --resource-group $RG --name $AKS
 
 kubectl get pods --all-namespaces
+
+kubectl apply -f hello-world-enclave.yaml
+# Hello World: https://learn.microsoft.com/en-us/azure/confidential-computing/confidential-enclave-nodes-aks-get-started#deploy-hello-world-from-an-isolated-enclave-application-
+# Advanced: https://github.com/Azure-Samples/confidential-container-samples
+# Simple: https://github.com/Azure-Samples/confidential-computing/tree/main/containersamples
